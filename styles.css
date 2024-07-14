@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h2 {
+    margin-bottom: 10px;
+}
+
+.note-form, .password-form {
+    margin-bottom: 10px;
+}
+
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 8px 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.note, .password {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.note h3, .password h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.note p, .password p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.note button, .password button {
+    margin-left: 10px;
+}
+
+.centered-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+}
+
+/* .inrow{
+    display: flex;
+}
+#password{
+    float: left;
+    width: 200px;
+}
+.inrow>.password_show{
+    float: right;
+    cursor: pointer;
+}
+.inrow > .fa{
+    display: inline;
+} */

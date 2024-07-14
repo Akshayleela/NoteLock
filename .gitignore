@@ -1,0 +1,172 @@
+const notesContainer = document.getElementById('notes-container');
+const passwordsContainer = document.getElementById('passwords-container');
+
+function addNote() {
+    const title = document.getElementById('note-title').value;
+    const content = document.getElementById('note-content').value;
+
+    if (title && content) {
+        const data = new FormData();
+        data.append('title', title);
+        data.append('content', content);
+
+        fetch('notes.php?action=add', {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.text())
+        .then(() => {
+            renderNotes();
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please fill in both fields.');
+    }
+}
+
+function addPassword() {
+    const sitename = document.getElementById('site-name').value;
+    const password = document.getElementById('site-password').value;
+    const description = document.getElementById('site-description').value;
+    const siteURL = document.getElementById('site-url').value;
+
+    if (sitename && password) {
+        const data = new FormData();
+        data.append('sitename', sitename);
+        data.append('password', password);
+        data.append('description', description);
+        data.append('siteURL', siteURL);
+
+        fetch('passwords.php?action=add', {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.text())
+        .then(() => {
+            renderPasswords();
+            document.getElementById('site-name').value = '';
+            document.getElementById('site-password').value = '';
+            document.getElementById('site-description').value = '';
+            document.getElementById('site-url').value = '';
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please fill in Site Name and Password fields.');
+    }
+}
+
+function editNote(id) {
+    const title = prompt('Edit title:');
+    const content = prompt('Edit content:');
+
+    if (title && content) {
+        const data = new FormData();
+        data.append('id', id);
+        data.append('title', title);
+        data.append('content', content);
+
+        fetch(`notes.php?action=edit`, {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.text())
+        .then(() => renderNotes())
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+function editPassword(id) {
+    const sitename = prompt('Edit site name:');
+    const password = prompt('Edit password:');
+    const description = prompt('Edit description:');
+    const siteURL = prompt('Edit site URL:');
+
+    if (sitename && password) {
+        const data = new FormData();
+        data.append('id', id);
+        data.append('sitename', sitename);
+        data.append('password', password);
+        data.append('description', description);
+        data.append('siteURL', siteURL);
+
+        fetch(`passwords.php?action=edit`, {
+            method: 'POST',
+            body: data
+        })
+        .then(response => response.text())
+        .then(() => renderPasswords())
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+function deleteNote(id) {
+    if (confirm('Are you sure you want to delete this note?')) {
+        fetch(`notes.php?action=delete&id=${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.text())
+        .then(() => renderNotes())
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+function deletePassword(id) {
+    if (confirm('Are you sure you want to delete this password?')) {
+        fetch(`passwords.php?action=delete&id=${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.text())
+        .then(() => renderPasswords())
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+function renderNotes() {
+    fetch('notes.php?action=get')
+    .then(response => response.json())
+    .then(data => {
+        notesContainer.innerHTML = '';
+        data.forEach(note => {
+            const noteElement = document.createElement('div');
+            noteElement.className = 'note';
+            noteElement.innerHTML = `
+                <h3>${note.title}</h3>
+                <p>${note.content}</p>
+                <button onclick="editNote(${note.id})">Edit</button>
+                <button onclick="deleteNote(${note.id})">Delete</button>
+            `;
+            notesContainer.appendChild(noteElement);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function renderPasswords() {
+    fetch('passwords.php?action=get')
+    .then(response => response.json())
+    .then(data => {
+        passwordsContainer.innerHTML = '';
+        data.forEach(password => {
+            const passwordElement = document.createElement('div');
+            passwordElement.className = 'password';
+            passwordElement.innerHTML = `
+                <h3>${password.sitename}</h3>
+                <p><strong>Password:</strong> ${password.password}</p>
+                <p><strong>Description:</strong> ${password.description}</p>
+                <p><strong>Site URL:</strong> ${password.siteURL}</p>
+                <button onclick="editPassword(${password.id})">Edit</button>
+                <button onclick="deletePassword(${password.id})">Delete</button>
+            `;
+            passwordsContainer.appendChild(passwordElement);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderNotes();
+    renderPasswords();
+});
